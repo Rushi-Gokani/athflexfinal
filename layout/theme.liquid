@@ -304,6 +304,26 @@
     {% render 'rapid-search-settings' %}
 
     {% include 'sr-checkout' %}
+
+<style>
+/* Override SearchTap Loader with Custom SVG */
+#searchModalContainer .st-results-loader,
+.st-page-loader,
+.st-next-page-loader {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDgwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDEwODApIHNjYWxlKDAuMSwgLTAuMSkiPgogICAgPHBhdGggY2xhc3M9ImF0aGZsZXgtbG9nby1wYXRoIiBwYXRoTGVuZ3RoPSIxMDAiIGQ9Ik01ODMwIDgxNDQgYy04MCAtMzEgLTE5OCAtNzQgLTI2MiAtOTYgbC0xMTggLTQwIDAgLTUxOCAwIC01MTggLTE1NSAtNyBjLTMxMSAtMTUgLTEwMzcgMjUgLTE0NjUgODAgLTE0NiAxOSAtMTM3IDIwIC0xMzMgLTEyIDcgLTQ1IC0yNCAtMTcyIC02MCAtMjQ4IC0zNiAtNzUgLTEzMiAtMjA4IC0xOTEgLTI2NCAtMjAgLTE5IC0zNiAtMzkgLTM2IC00NCAwIC02IDEwMiAtNyAyNjggLTMgNjQ0IDE2IDExNDggNTAgMTYwMSAxMDcgODkgMTEgMTY2IDE4IDE2OSAxNCAxMCAtMTAgLTE0IC02MiAtMTM2IC0zMDAgLTY4NSAtMTMzMSAtMTM2OCAtMjEzNSAtMjQ2MiAtMjkwMiBsLTg1IC01OSAtMTcgLTE4MCBjLTM2IC0zNjEgLTQzIC00NDQgLTQxIC00NDQgNiAwIDIzNyAxNTcgMzY4IDI1MCA0OTYgMzU0IDkyMyA3MzkgMTM3MSAxMjM3IDMyIDM2IDE3MSA5NiA1NjkgMjQ4IDEyNyA0OCAyNzQgMTA1IDMyOCAxMjYgNTMgMjEgMTAwIDM5IDEwMiAzOSAzIDAgNSAtNDUyIDUgLTEwMDUgbDAgLTEwMDUgMjY1IDAgMjY1IDAgMSA2MzggYzEgMzUwIDUgODQyIDggMTA5MiBsNiA0NTUgMTgwIDkyIGM1OTIgMzAzIDEyMTIgNTY4IDE3NDkgNzQ4IDg5IDMwIDE1NCA1NSAxNDYgNTUgLTM4IDAgLTQ3MiAtNDIgLTYyMCAtNjEgLTQ0MSAtNTYgLTk1OSAtMTc4IC0xMzQ3IC0zMTggbC0xMTMgLTQwIDAgNzE0IDAgNzE1IDIzIDUgYzEyIDMgODUgMTkgMTYyIDM1IDQ2OSAxMDIgOTM0IDI1OSAxMjc1IDQzMCAxODcgOTQgNTEwIDI5NCA0OTYgMzA3IC0yIDMgLTEzIDAgLTIzIC02IC0xMSAtNSAtMTE5IC00NCAtMjQxIC04NSAtMzkyIC0xMzMgLTc3MiAtMjMwIC0xMTUyIC0yOTYgLTE3NyAtMzAgLTQ3MCAtNzAgLTUxNSAtNzAgbC0yNSAwIDAgNTk1IGMwIDMyNyAtMyA1OTUgLTcgNTk1IC01IDAgLTczIC0yNiAtMTUzIC01NnogbS0zODcgLTMwNjQgYy01IC0zIC01NSAtMjQgLTExMyAtNDUgLTU4IC0yMSAtMTUyIC01OCAtMjA5IC04MiAtNTcgLTI0IC0xMDYgLTQyIC0xMDcgLTQwIC0yIDIgNTYgOTMgMTI5IDIwMyA3MyAxMDkgMTcxIDI2MiAyMTggMzM4IGw4NCAxMzkgMyAtMjUzIGMxIC0xNDAgLTEgLTI1NiAtNSAtMjYweiIvPgogIDwvZz4KICA8c3R5bGU+CiAgICAuYXRoZmxleC1sb2dvLXBhdGggewogICAgICBzdHJva2U6ICMwMDA7CiAgICAgIHN0cm9rZS13aWR0aDogMTUwOwogICAgICBzdHJva2UtbGluZWNhcDogcm91bmQ7CiAgICAgIHN0cm9rZS1saW5lam9pbjogcm91bmQ7CiAgICAgIGZpbGw6IHRyYW5zcGFyZW50OwogICAgICBzdHJva2UtZGFzaGFycmF5OiAxMDA7CiAgICAgIHN0cm9rZS1kYXNob2Zmc2V0OiAxMDA7CiAgICAgIGFuaW1hdGlvbjogbG9nb0RyYXdGaWxsIDIuNXMgZWFzZS1pbi1vdXQgaW5maW5pdGU7CiAgICB9CiAgICBAa2V5ZnJhbWVzIGxvZ29EcmF3RmlsbCB7CiAgICAgIDAlIHsKICAgICAgICBzdHJva2UtZGFzaG9mZnNldDogMTAwOwogICAgICAgIGZpbGw6IHRyYW5zcGFyZW50OwogICAgICB9CiAgICAgIDQwJSB7CiAgICAgICAgc3Ryb2tlLWRhc2hvZmZzZXQ6IDA7CiAgICAgICAgZmlsbDogdHJhbnNwYXJlbnQ7CiAgICAgIH0KICAgICAgNjAlIHsKICAgICAgICBzdHJva2UtZGFzaG9mZnNldDogMDsKICAgICAgICBmaWxsOiAjMDAwOwogICAgICB9CiAgICAgIDEwMCUgewogICAgICAgIHN0cm9rZS1kYXNob2Zmc2V0OiAwOwogICAgICAgIGZpbGw6ICMwMDA7CiAgICAgIH0KICAgIH0KICA8L3N0eWxlPgo8L3N2Zz4=') !important;
+  background-color: transparent !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  border: none !important;
+  animation: none !important;
+  -webkit-animation: none !important;
+  width: 80px !important;
+  height: 80px !important;
+  margin: 20px auto !important;
+  color: transparent !important;
+}
+</style>
   </head>
 
   <body class="template-{{ request.page_type }} {{layout_body}} {{style_dots}} {{style_text_size_varriant}} {{style_arrows}} {{product_card_layout}} {% if settings.enable_button_disable_arrows %} enable_button_disable_arrows{% endif %}{% if settings.display_text_color_title %} enable_text_color_title{% if settings.style_text_color_varriant == '02' %} style_2_text_color_varriant{% endif %}{% endif %}{% if settings.hide_compare_homepage %} hide_compare_homepage{% endif %} {{ quick_shop_type }}{% if settings.show_image_loading %} show_image_loading{% endif %}{% if settings.show_effect_close %} show_effect_close{% endif %}{% if settings.enable_layout_rtl and enable_iso_rtl %} layout_rtl{% endif %}{% if request.design_mode %} shopify-design-mode{% endif %}{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}{% if settings.enable_following_cursor and settings.following_cursor_style == 'default' %} cursor-fixed__show{% endif %}{% unless settings.enable_currencies %} disable_currencies{% endunless %}{% if settings.enable_button_1_border_outside %} btn_1_br_outside{% endif %}{% if settings.enable_button_2_border_outside %} btn_2_br_outside{% endif %}{% if settings.enable_button_3_border_outside %} btn_3_br_outside{% endif %}{% if settings.show_price_percent %} show_price_percent{% endif %}{% if settings.show_wishlist_full_icon %} icon_wishlist_full{% endif %}{% if request.page_type == 'product' and product.metafields.custom.app_exclusive == true %} app-exclusive-product{% endif %}

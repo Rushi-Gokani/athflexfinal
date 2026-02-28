@@ -13,5 +13,5 @@
     "results_count": {{ 'general.search.view_all' | t : count : search.results_count | json }},
     "results_label": {% if search.results_count == 0 %}{{ 'general.search.no_results' | t | json }}{% else %}{{ 'general.search.view_results'| t | json }}{% endif %},
     "title_heading": {{ 'general.search.heading_results' | t | json }},
-    "url": "{{ routes.search_url }}?q={{ search.terms }}"
+    "url": {{ routes.search_url | append: '?q=' | append: search.terms | json }}
 }

@@ -1,11 +1,11 @@
-{%- if request.design_mode == false and settings.enable_preloading_screen -%}
+{%- if request.design_mode == false -%}
   <style>
     .preload-screen {
       background-color: {{settings.preloading_screen_bg}};
       z-index: 9999;
       opacity: 1;
       visibility: visible;
-      transition: opacity .35s ease, visibility .35s ease;
+      transition: opacity .8s ease, visibility .8s ease;
       overflow: hidden;
       left: 0;
       top: 0;
@@ -73,37 +73,20 @@
   </style>
 
   <preload-screen class="preload-screen no-js-hidden">
-    {%- if settings.preloading_screen_image != blank -%}
-      <div class="preload-screen__image">
-        {%- assign logo_alt = settings.preloading_screen_image.alt | default: shop.name | escape -%}
-        {%- assign logo_height = settings.preloading_screen_image.width | divided_by: settings.preloading_screen_image.aspect_ratio -%}
-        {% capture sizes %}(max-width: {{ settings.preloading_screen_image.width | times: 2 }}px) 50vw, {{ settings.preloading_screen_image.width }}px{% endcapture %}
-        {% capture widths %}{{ settings.preloading_screen_image.width }}, {{ settings.preloading_screen_image.width | times: 1.5 | round }}, {{ settings.preloading_screen_image.width | times: 2 }}{% endcapture %}
-        {{ settings.preloading_screen_image | image_url: width: 600 | image_tag:
-          class: 'header__heading-logo motion-reduce',
-          widths: widths,
-          height: logo_height,
-          width: settings.preloading_screen_image.width,
-          alt: logo_alt,
-          sizes: sizes,
-          preload: true
-        }}
-      </div>
-    {%- else -%}
-      {%- case settings.preloading_screen_icon -%}
-        {%- when 'loading-bar' -%}
-          <span class="preload-screen__loading-bar"></span>
-        {%- when 'rolling' -%}
-          <span class="preload-screen__rolling"></span>
-      {%- endcase -%}
-    {%- endif -%}
+    {% render 'logo-loader' %}
   </preload-screen>
   
   <script>
     class PreloadScreen extends HTMLElement {
       constructor() {
         super();
-        document.addEventListener("DOMContentLoaded", () => {this.show()});
+        window.addEventListener("load", () => {
+          // Wait for full window load (including all images/assets)
+          // Add a short delay to ensure rendering settles before smooth fade-out
+          setTimeout(() => {
+            this.show();
+          }, 800); 
+        });
       }
   
       show() {
