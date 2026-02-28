@@ -1,0 +1,58 @@
+<div id="st-autocomplete-container"></div>
+<div id="st-search-container">
+  <script>
+    // Conditional SearchTap loading - load only when user interacts with search
+    (function() {
+      let searchTapLoaded = false;
+
+      function loadSearchTap() {
+        if (searchTapLoaded) return;
+
+        searchTapLoaded = true;
+        const script = document.createElement('script');
+        script.src = '{{ 'searchtap.js' | asset_url }}';
+        script.defer = true;
+        script.onload = function() {
+          // Initialize SearchTap after script loads
+          const searchtapElement = document.createElement('searchtap');
+          document.getElementById('st-search-container').appendChild(searchtapElement);
+        };
+        document.head.appendChild(script);
+      }
+
+      // Load SearchTap when user clicks on any search icon
+      function initSearchListeners() {
+        // Desktop search icon
+        const desktopSearchIcon = document.querySelector('.st-search-icon.desktop_searchIcn');
+        if (desktopSearchIcon) {
+          desktopSearchIcon.addEventListener('click', loadSearchTap);
+        }
+
+        // Mobile search icon
+        const mobileSearchIcon = document.querySelector('#search-mobile.st-search-icon-mobile');
+        if (mobileSearchIcon) {
+          mobileSearchIcon.addEventListener('click', loadSearchTap);
+        }
+
+        // Also load on search input focus (for any other search inputs)
+        const searchInputs = document.querySelectorAll('input[type="search"], input[name="q"]');
+        searchInputs.forEach(input => {
+          input.addEventListener('focus', loadSearchTap);
+        });
+
+        // Load SearchTap immediately if we're on search results page
+        {% if request.page_type == 'search' %}
+          // User landed on search page, load immediately
+          loadSearchTap();
+        {% endif %}
+      }
+
+      // Initialize listeners when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSearchListeners);
+      } else {
+        initSearchListeners();
+      }
+    })();
+  </script>
+</div>

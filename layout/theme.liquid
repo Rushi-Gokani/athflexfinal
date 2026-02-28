@@ -1,0 +1,493 @@
+<!doctype html>
+{%- liquid
+  if settings.list_iso_rtl != blank
+    assign locale_iso_code = request.locale.iso_code
+    assign arr_list_rtl = settings.list_iso_rtl | remove: ' ' | split: ','
+    if arr_list_rtl contains locale_iso_code
+      assign enable_iso_rtl = true
+    else
+      assign enable_iso_rtl = false
+    endif
+  endif
+-%}
+<html
+  class="no-js"
+  lang="{{ request.locale.iso_code }}"
+  {% if settings.enable_layout_rtl and enable_iso_rtl %}
+    dir="rtl"
+  {% endif %}
+>
+  <!-- Custom Styles and Scripts to Add Account Icon for Desktop and Mobile -->
+  <style>
+    /* Hide only the existing account icon */
+    .tt-account {
+      display: none !important;
+    }
+
+    /* Style for the custom account icon */
+    .custom-account-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--account-icon-color, #000); /* Set your desired icon color */
+      margin-left: 20px; /* Space between cart and account icon for desktop */
+      cursor: pointer;
+    }
+
+    .custom-account-icon svg {
+      width: 24px; /* Adjust to match other icons for desktop */
+      height: 24px;
+    }
+
+    /* Hover effect */
+    .custom-account-icon:hover {
+      color: var(--account-icon-hover-color, #555); /* Change color on hover if desired */
+    }
+
+    /* Ensure header icons are aligned properly */
+    .tt-col-obj.tt-obj-options {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Responsive Adjustments for Mobile */
+    @media (max-width: 767px) {
+      .tt-mobile-parent-cart {
+        display: flex;
+        align-items: center;
+      }
+
+      /* Adjust space for mobile */
+      .custom-account-icon {
+        margin-left: 20px;
+      }
+
+      .custom-account-icon svg {
+        width: 20px; /* Adjust for smaller icon size on mobile */
+        height: 20px;
+      }
+    }
+  </style>
+
+  {% comment %} <!-- Define the shipRocketMarketingLogin function -->
+  <script>
+    function shipRocketMarketingLogin() {
+      // Redirect to the login page
+      window.location.href = '/account/login';
+    }
+  </script>
+
+  <script>
+  // Function to check if customer is logged in
+  function isCustomerLoggedIn() {
+    {% if customer %}
+      return true;
+    {% else %}
+      return false;
+    {% endif %}
+  }
+
+  // Your custom SVG Icon with fill="currentColor"
+  var accountIconSVG = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 15 14" fill="none">
+      <path d="M13.12 13.1193C13.12 10.1 10.1828 7.65234 6.56 7.65234C2.93724 7.65234 0 10.1 0 13.1193H13.12Z" fill="currentColor"/>
+      <path d="M6.54562 6.56C8.35712 6.56 9.82562 5.09149 9.82562 3.28C9.82562 1.46851 8.35712 0 6.54562 0C4.73413 0 3.26562 1.46851 3.26562 3.28C3.26562 5.09149 4.73413 6.56 6.54562 6.56Z" fill="currentColor"/>
+      <path d="M11.9339 6.93928C12.1313 7.09937 12.1313 7.40062 11.9339 7.56071L8.65191 10.2215C8.39043 10.4335 8 10.2474 8 9.91077V4.58923C8 4.25262 8.39043 4.06653 8.6519 4.27852L11.9339 6.93928Z" fill="url(#paint0_linear_7227_3265)" stroke="url(#paint1_linear_7227_3265)" stroke-opacity="0.6725" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14.6135 6.93928C14.811 7.09937 14.811 7.40062 14.6135 7.56071L11.3316 10.2215C11.0701 10.4335 10.6797 10.2474 10.6797 9.91077V4.58923C10.6797 4.25262 11.0701 4.06653 11.3316 4.27852L14.6135 6.93928Z" fill="url(#paint2_linear_7227_3265)" stroke="url(#paint3_linear_7227_3265)" stroke-opacity="0.6725" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs>
+        <linearGradient id="paint0_linear_7227_3265" x1="10.2062" y1="6.3744" x2="10.0865" y2="10.748" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#FFE6A5"/>
+          <stop offset="1" stop-color="white"/>
+        </linearGradient>
+        <linearGradient id="paint1_linear_7227_3265" x1="10.1586" y1="3.75" x2="10.1586" y2="10.75" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#DBB015"/>
+          <stop offset="0.517213" stop-color="#FFDC5B"/>
+        </linearGradient>
+        <linearGradient id="paint2_linear_7227_3265" x1="12.8858" y1="6.3744" x2="12.7662" y2="10.748" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#FFE6A5"/>
+          <stop offset="1" stop-color="white"/>
+        </linearGradient>
+        <linearGradient id="paint3_linear_7227_3265" x1="12.8382" y1="3.75" x2="12.8382" y2="10.75" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#DBB015"/>
+          <stop offset="0.517213" stop-color="#FFDC5B"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  `;
+
+  // Function to remove the native account icon for desktop and mobile
+  function removeNativeAccountIcon() {
+    var nativeAccountIconDesktop = document.querySelector('.header--account.header--icon-border');
+    if (nativeAccountIconDesktop) {
+      nativeAccountIconDesktop.parentElement.removeChild(nativeAccountIconDesktop);
+    }
+
+    var nativeAccountIconMobile = document.querySelector('.header-mobile__item.header-mobile__item--customer');
+    if (nativeAccountIconMobile) {
+      nativeAccountIconMobile.parentElement.removeChild(nativeAccountIconMobile);
+    }
+  }
+
+  // Function to add the custom account icon at the right position for desktop
+  function addAccountIconDesktop() {
+    var accountContainerDesktop = document.querySelector('.header--wishlist.header--icon-border.d-flex.flex-align-center.h-100.d-flex.p-relative');
+
+    if (accountContainerDesktop) {
+      var accountLinkDesktop = document.createElement('a');
+      accountLinkDesktop.classList.add('custom-account-icon');
+      accountLinkDesktop.title = 'Account';
+
+      if (isCustomerLoggedIn()) {
+        // User is logged in: Link to /account
+        accountLinkDesktop.href = '/account';
+      } else {
+        // User is not logged in: Trigger login function on click
+        accountLinkDesktop.href = '#';
+        accountLinkDesktop.onclick = function(event) {
+          event.preventDefault();
+          if (typeof shipRocketMarketingLogin === 'function') {
+            shipRocketMarketingLogin();
+          } else {
+            console.warn('shipRocketMarketingLogin function is not defined.');
+            window.location.href = '/account/login';
+          }
+        };
+      }
+
+      accountLinkDesktop.innerHTML = accountIconSVG;
+
+      // Append the custom icon right after the cart container
+      accountContainerDesktop.appendChild(accountLinkDesktop);
+    }
+  }
+
+  // Function to add the custom account icon at the right position for mobile
+  function addAccountIconMobile() {
+    var accountContainerMobile = document.querySelector('.header-mobile__item.header-mobile__item--cart');
+
+    if (accountContainerMobile) {
+      var accountLinkMobile = document.createElement('a');
+      accountLinkMobile.classList.add('custom-account-icon');
+      accountLinkMobile.title = 'Account';
+
+      if (isCustomerLoggedIn()) {
+        // User is logged in: Link to /account
+        accountLinkMobile.href = '/account';
+      } else {
+        // User is not logged in: Trigger login function on click
+        accountLinkMobile.href = '#';
+        accountLinkMobile.onclick = function(event) {
+          event.preventDefault();
+          if (typeof shipRocketMarketingLogin === 'function') {
+            shipRocketMarketingLogin();
+          } else {
+            console.warn('shipRocketMarketingLogin function is not defined.');
+            window.location.href = '/account/login';
+          }
+        };
+      }
+
+      accountLinkMobile.innerHTML = accountIconSVG;
+
+      // Append the custom icon to the mobile header
+      accountContainerMobile.appendChild(accountLinkMobile);
+    }
+  }
+
+  // Ensure the functions are called after DOM is loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    removeNativeAccountIcon();
+    addAccountIconDesktop();  // Add custom icon to desktop
+    addAccountIconMobile();   // Add custom icon to mobile
+  });
+  </script> {% endcomment %}
+
+  <head>
+<script> window.Shopflo = { ...(window.Shopflo ?? {}), autoOnboarding: true} </script>
+
+
+<!-- n-s START -->
+<link rel="dns-prefetch" href="https://x.nitrocommerce.ai/">
+<link rel="preconnect" href="https://x.nitrocommerce.ai" crossorigin>
+<script id="nitro-embed" type="text/javascript">
+!function(t,e,n,s,i){var a,r;t.NitroAnalyticsObject=i,t[i]=t[i]||function(){(t[i].q=t[i].q||[]).push(arguments)},t[i].l=1*new Date,t[i].h=s,(a=e.createElement(n)).setAttribute("data-cfasync","false"),r=e.getElementsByTagName(n)[0],a.id="nitro-a-scrpt",a.async=1,a.src=s,r.parentNode.insertBefore(a,r)}(window,document,"script","https://x.nitrocommerce.ai/a_compressed.js","nitroAnalytics"),nitroAnalytics("impression","3fba7514-1b1a-4c06-b803-587da36d3e55","shopify", {sauce_code: "1L0WG6JFJJ"});
+</script>
+<!-- n-s END -->
+
+
+    <!-- Added by AVADA SEO Suite -->
+    {% include 'avada-seo' %}
+    <!-- /Added by AVADA SEO Suite -->
+    {% include 'taginstall-head' %}
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}" canonical-shop-url="{{ shop.url }}/">
+    {%- if settings.favicon != blank -%}
+      <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+    {%- endif -%}
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+    {% render 'meta-tags' %}
+    {{ content_for_header }}
+    {% render 'variable' %}
+    {% render 'global-style' %}
+    {% render 'global-script' %}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
+
+    <!-- <script type="module" src="{{ 'Shopflo_Rewards.js' | asset_url }}"></script> -->
+
+    {%- liquid
+      if settings.layout_body == 'full'
+        assign layout_body = 'body-full-width'
+      elsif settings.layout_body == 'boxed'
+        assign layout_body = 'body-boxed'
+      elsif settings.layout_body == 'custom_width'
+        assign layout_body = 'body-custom-width'
+      endif
+
+      if settings.style_dots == '02'
+        assign style_dots = 'style-dots-2'
+      endif
+
+      if settings.style_arrows == '02'
+        assign style_arrows = 'style-arrows-2'
+      elsif settings.style_arrows == '05'
+        assign style_arrows = 'style-arrows-5'
+      endif
+
+      if settings.product_card_layout == '02'
+        assign product_card_layout = 'product-card-layout-02'
+      elsif settings.product_card_layout == '03'
+        assign product_card_layout = 'product-card-layout-03'
+      elsif settings.product_card_layout == '04'
+        assign product_card_layout = 'product-card-layout-04'
+      elsif settings.product_card_layout == '05'
+        assign product_card_layout = 'product-card-layout-05'
+      elsif settings.product_card_layout == '06'
+        assign product_card_layout = 'product-card-layout-06'
+      elsif settings.product_card_layout == '07'
+        assign product_card_layout = 'product-card-layout-07'
+      elsif settings.product_card_layout == '08'
+        assign product_card_layout = 'product-card-layout-08'
+      else
+        assign product_card_layout = 'product-card-layout-01'
+      endif
+
+      if settings.quick_shop_type == '2'
+        assign quick_shop_type = 'quick_shop_option_2'
+      elsif settings.quick_shop_type == '3'
+        assign quick_shop_type = 'quick_shop_option_3'
+      endif
+
+      if settings.style_text_size_varriant == '02'
+        assign style_text_size_varriant = 'size_varriant_style_2'
+      endif
+    -%}
+
+    {{ 'custom.css' | asset_url | stylesheet_tag }}
+
+    {% render 'rapid-search-settings' %}
+
+    {% include 'sr-checkout' %}
+  </head>
+
+  <body class="template-{{ request.page_type }} {{layout_body}} {{style_dots}} {{style_text_size_varriant}} {{style_arrows}} {{product_card_layout}} {% if settings.enable_button_disable_arrows %} enable_button_disable_arrows{% endif %}{% if settings.display_text_color_title %} enable_text_color_title{% if settings.style_text_color_varriant == '02' %} style_2_text_color_varriant{% endif %}{% endif %}{% if settings.hide_compare_homepage %} hide_compare_homepage{% endif %} {{ quick_shop_type }}{% if settings.show_image_loading %} show_image_loading{% endif %}{% if settings.show_effect_close %} show_effect_close{% endif %}{% if settings.enable_layout_rtl and enable_iso_rtl %} layout_rtl{% endif %}{% if request.design_mode %} shopify-design-mode{% endif %}{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}{% if settings.enable_following_cursor and settings.following_cursor_style == 'default' %} cursor-fixed__show{% endif %}{% unless settings.enable_currencies %} disable_currencies{% endunless %}{% if settings.enable_button_1_border_outside %} btn_1_br_outside{% endif %}{% if settings.enable_button_2_border_outside %} btn_2_br_outside{% endif %}{% if settings.enable_button_3_border_outside %} btn_3_br_outside{% endif %}{% if settings.show_price_percent %} show_price_percent{% endif %}{% if settings.show_wishlist_full_icon %} icon_wishlist_full{% endif %}{% if request.page_type == 'product' and product.metafields.custom.app_exclusive == true %} app-exclusive-product{% endif %}
+">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-K5796J5"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div class="body-content-wrapper">
+      <a class="skip-to-content-link button visually-hidden" href="#MainContent">
+        {{- 'accessibility.skip_to_text' | t -}}
+      </a>
+      {% render 'preload-screen' %}
+      {% sections 'header-group' %}
+      {% render 'wrapper-header' %}
+
+      {%- if settings.layout_body == 'boxed' -%}
+        <div class="wrapper-hasbanner-adv">
+      {%- endif -%}
+      {% render 'halo-banner-adv-left' %}
+      {% render 'halo-banner-adv-right' %}
+      <main id="MainContent" class="wrapper-body content-for-layout focus-none" role="main" tabindex="-1">
+        {{ content_for_layout }}
+      </main>
+      {%- if settings.layout_body == 'boxed' -%}
+        </div>
+      {%- endif -%}
+
+      <div class="wrapper-footer">{% sections 'footer-group' %}</div>
+
+      {% section 'halo-toolbar-mobile' %}
+
+      <ul hidden>
+        <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
+      </ul>
+
+      {% render 'global-script-2' %}
+    </div>
+    {% render 'halo-popup' %}
+
+    {%- if settings.enable_view_documentation -%}
+      {% render 'theme-editor-notification' %}
+    {%- endif -%}
+
+    <div class="background-overlay">
+      {%- if settings.show_effect_close -%}
+        <div class="background-cursor-wrapper">
+          <div class="background-cursor-wrapper_outer">
+            <div class="background-cursor-wrapper_inner">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20">
+                <g class="nc-icon-wrapper" fill="#ffffff" transform="translate(0.5, 0.5)"><line fill="none" stroke-width="6" x1="46" y1="2" x2="2" y2="46"/> <line fill="none" stroke-width="6" x1="46" y1="46" x2="2" y2="2"/></g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {% render 'halo-sidebar' %}
+
+    {%- if settings.enable_following_cursor -%}
+      {% render 'cursor-fixed', style_cursor: settings.following_cursor_style %}
+    {%- endif -%}
+    {% if page.handle contains 'products/' %}
+      <script>
+        let targetNode = document.querySelector('html');
+        const floBuyNowCb = function (mutationList) {
+          mutationList.forEach((mutation) => {
+            let isVariantAvailable = !document.querySelector('button[name="add"]')?.disabled; //Line to be modified
+            if (isVariantAvailable) {
+              document.querySelector('#flo-buy-now-button').style.setProperty('display', 'block', 'important');
+            }
+            else {
+              document.querySelector('#flo-buy-now-button').style.setProperty('display', 'none', 'important');
+            }
+          });
+        };
+        const floBuyNowObserver = new MutationObserver(floBuyNowCb);
+        const configs = { attributes: true, childList: true, subtree: true };
+        floBuyNowObserver.observe(targetNode, configs);
+      </script>
+    {% endif %}
+    <!-- Begin Shopify–payment-cart JavaScript -->
+    <script type="text/javascript">
+      var mid = '3565-108';
+    </script>
+    <script src="https://checkout-merchant.snapmint.com/js/v1/3565-108" defer></script>
+    <!-- End Shopify-payment JavaScript -->
+
+    <div class="size-chart-wrapper">
+      <div class="size-chart-inner">
+        <!--
+          <img class="size-chart-logo" src="https://cdn.shopify.com/s/files/1/0403/9301/5445/files/logo-popup.png?v=1715066055">
+        -->
+
+        <svg
+          onclick="toggleChart(false)"
+          class="sclose"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M11.883 3.007 12 3a1 1 0 0 1 .993.883L13 4v7h7a1 1 0 0 1 .993.883L21 12a1 1 0 0 1-.883.993L20 13h-7v7a1 1 0 0 1-.883.993L12 21a1 1 0 0 1-.993-.883L11 20v-7H4a1 1 0 0 1-.993-.883L3 12a1 1 0 0 1 .883-.993L4 11h7V4a1 1 0 0 1 .883-.993L12 3l-.117.007Z" fill="#222F3D" />
+        </svg>
+
+        <div class="table-toggle" data-expanded="false">
+          {% comment %} <div class="table-toggle-button"></div> {% endcomment %}
+          <div class="table-unit">
+            <p class="unit-selector">inch</p>
+            <p class="unit-selector">cm</p>
+          </div>
+        </div>
+
+        <div class="p1-show">
+          <img
+            alt="{{product.metafields.custom.size_chart.value.image_inches}}"
+            class="size-image"
+            src="{{ product.metafields.custom.size_chart.value.image_inches | img_url : "master" }}"
+          >
+        </div>
+        <div class="p2-show" style="display: none">
+          <img
+            alt="{{product.metafields.custom.size_chart.value.image_cms}}"
+            class="size-image"
+            src="{{ product.metafields.custom.size_chart.value.image_cms | img_url : "master" }}"
+          >
+        </div>
+      </div>
+    </div>
+
+    {%- if settings.use_custom_js -%}
+      {{ 'custom.js' | asset_url | script_tag }}
+    {%- endif -%}
+            
+{% render 'searchtap' %}
+  {% comment %}added by team searchtap {% endcomment %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        if (typeof Storage !== "undefined") { 
+          let viewedProducts = localStorage.getItem('viewedProducts');
+          viewedProducts = viewedProducts ? JSON.parse(viewedProducts) : [];
+      
+          if (!viewedProducts.includes({{ product.id }})) {
+            if (viewedProducts.length >= 5) {
+              viewedProducts.pop(); 
+            }
+            viewedProducts.unshift({{ product.id }});
+            localStorage.setItem('viewedProducts', JSON.stringify(viewedProducts));
+          }
+        }
+      });
+    </script>
+  <!-- Added by Team SearchTap: Ends -->
+            
+    {% comment %}
+
+
+         <script>
+          let targetNode = document.querySelector('html');
+          const floBuyNowCb = function (mutationList) {
+            mutationList.forEach((mutation) => {
+              let isVariantAvailable = !document.querySelector('button[name="add"]').disabled; //Line to be modified
+              if (isVariantAvailable) {
+                document.querySelector('#flo-buy-now-button').style.setProperty('display', 'block', 'important');
+              }
+              else {
+                document.querySelector('#flo-buy-now-button').style.setProperty('display', 'none', 'important');
+              }
+            });
+          };
+          const floBuyNowObserver = new MutationObserver(floBuyNowCb);
+          const configs = { attributes: true, childList: true, subtree: true };
+          floBuyNowObserver.observe(targetNode, configs);
+      </script>
+    {% endcomment %}
+
+  </body>
+</html>
