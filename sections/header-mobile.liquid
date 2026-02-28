@@ -96,7 +96,7 @@
                                             {%- assign logo_width_img = logo_width | append: 'x' -%}
                                             {%- assign logo_width_retina = logo_width | times: 2 | append: 'x'  -%}
                                             {%- assign logo_height = block.settings.logo_width_mobile | divided_by: logo.aspect_ratio | round -%}
-                                            <img class="logo-icon" src="https://athflex.com/cdn/shop/files/logo_50x.png?v=1709029984"/>
+                                            <img srcset="{{ logo | img_url: logo_width_img }}, {{ logo | img_url: logo_width_retina }} 2x" src="{{ logo | img_url: '50x' }}" loading="lazy" class="logo-icon" alt="{{ logo.alt | default: shop.name | escape }}" style="max-height: 50px; width: auto;">
                                             <img srcset="{{ logo | img_url: logo_width_img }}, {{ logo | img_url: logo_width_retina }} 2x" src="{{ logo | img_url: logo_width_img }}" loading="lazy" width="{{ logo_width }}" height="{{ logo_height }}" class="header__heading-logo logo__main logo-full" alt="{{ logo.alt | default: shop.name | escape }}">
                                             {%- if check_transparent -%}
                                                 <img srcset="{{ logo_transparent | img_url: logo_width_img }}, {{ logo_transparent | img_url: logo_width_retina }} 2x" src="{{ logo_transparent | img_url: logo_width_img }}" loading="lazy" class="header__heading-logo logo--transparent d-inline-block" alt="{{ logo.alt | default: shop.name | escape }}" width="{{ logo_width }}" height="{{ logo_height }}">
@@ -107,6 +107,7 @@
                                             {%- assign logo_width_img = logo_width | append: 'x' -%}
                                             {%- assign logo_width_retina = logo_width | times: 2 | append: 'x' -%}
                                             {%- assign logo_height = block.settings.logo_width_mobile | divided_by: logo.aspect_ratio | round -%}
+                                            <img srcset="{{ logo | img_url: logo_width_img }}, {{ logo | img_url: logo_width_retina }} 2x" src="{{ logo | img_url: '50x' }}" loading="lazy" class="logo-icon" alt="{{ logo.alt | default: shop.name | escape }}" style="max-height: 50px; width: auto;">
                                             <img srcset="{{ logo | img_url: logo_width_img }}, {{ logo | img_url: logo_width_retina }} 2x" src="{{ logo | img_url: logo_width_img }}" loading="lazy" width="{{ logo_width }}" height="{{ logo_height }}" class="header__heading-logo" alt="{{ logo.alt | default: shop.name | escape }}">
                                         {%- else -%}
                                             <span class="h2 {{ block.settings.logo_text_transform }}">{% if block.settings.logo_text != blank %}{{ block.settings.logo_text }}{% else %}{{ shop.name }}{% endif %}</span>
